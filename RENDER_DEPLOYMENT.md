@@ -42,6 +42,9 @@ This guide will help you deploy both the backend and frontend to Render.
    - **Name**: `fleet-management-frontend`
    - **Build Command**: `cd frontend && npm install && npm run build`
    - **Publish Directory**: `frontend/dist`
+   
+   **Note**: If you get "vite: Permission denied" error, try this build command instead:
+   `cd frontend && npm install && npx vite build`
 
 4. **Add Environment Variables**:
    - `VITE_API_URL` = Your backend URL from Step 1 (e.g., `https://fleet-management-backend.onrender.com/api`)
