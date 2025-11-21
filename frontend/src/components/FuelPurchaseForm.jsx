@@ -140,7 +140,10 @@ const FuelPurchaseForm = () => {
       setReceiptPreview(null);
       setReceiptPath(null);
     } catch (error) {
-      alert('❌ Error recording fuel purchase: ' + error.message);
+      console.error('❌ Error in handleSubmit:', error);
+      const errorMessage = error.response?.data?.error || error.response?.data?.details || error.message || 'Network error. Please check your connection.';
+      console.error('Error message:', errorMessage);
+      alert('❌ Error recording fuel purchase: ' + errorMessage);
     } finally {
       setIsSubmitting(false);
     }

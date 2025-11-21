@@ -189,11 +189,24 @@ export const fuelPurchaseAPI = {
   
   async createFuelPurchase(data) {
     try {
+      console.log('📤 Creating fuel purchase:', data);
+      console.log('🌐 API Base URL:', API_BASE);
       const response = await api.post('/fuel-purchases', data);
+      console.log('✅ Fuel purchase created:', response.data);
       return response.data;
     } catch (error) {
+      console.error('❌ Error creating fuel purchase:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL
+      });
+      
       if (!navigator.onLine) {
         // Queue for offline sync
+        console.log('📴 Offline - saving to local storage');
         await db.fuelPurchases?.add({ ...data, sync_status: 'pending' });
         return { success: true, offline: true };
       }

@@ -115,6 +115,29 @@ const createFuelPurchase = async (req, res) => {
       receipt_slip_path
     } = req.body;
     
+    console.log('📝 createFuelPurchase called with:', {
+      vehicle_id,
+      liters,
+      amount,
+      receipt_number,
+      purchase_date,
+      odometer_reading,
+      station_name,
+      notes,
+      receipt_slip_path
+    });
+    
+    // Validate required fields
+    if (!vehicle_id) {
+      return res.status(400).json({ success: false, error: 'Vehicle ID is required' });
+    }
+    if (!liters || liters <= 0) {
+      return res.status(400).json({ success: false, error: 'Liters must be greater than 0' });
+    }
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ success: false, error: 'Amount must be greater than 0' });
+    }
+    
     const result = await db.query(
       `INSERT INTO fuel_purchases 
        (vehicle_id, liters, amount, receipt_number, purchase_date, odometer_reading, station_name, notes, receipt_slip_path) 
@@ -122,6 +145,8 @@ const createFuelPurchase = async (req, res) => {
        RETURNING *`,
       [vehicle_id, liters, amount, receipt_number, purchase_date || new Date(), odometer_reading, station_name, notes, receipt_slip_path || null]
     );
+    
+    console.log('✅ Fuel purchase created:', result.rows[0]?.id);
     
     // Update vehicle odometer tracking if provided
     if (vehicle_id && odometer_reading) {
@@ -143,7 +168,18 @@ const createFuelPurchase = async (req, res) => {
       data: result.rows[0]
     });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    console.error('❌ Error creating fuel purchase:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      detail: error.detail,
+      constraint: error.constraint
+    });
+    res.status(400).json({ 
+      success: false, 
+      error: error.message,
+      details: error.detail || error.message
+    });
   }
 };
 
