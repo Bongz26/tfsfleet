@@ -1,0 +1,27 @@
+fleet-management-app/
+├── backend/                 # Node.js API
+│   ├── src/
+│   │   ├── controllers/     # Route handlers
+│   │   ├── models/          # Database models
+│   │   ├── routes/          # API routes
+│   │   ├── middleware/      # Auth, validation
+│   │   ├── config/          # DB configuration
+│   │   └── utils/           # Helpers, sync logic
+│   ├── package.json
+│   └── server.js
+├── frontend/                # React PWA
+│   ├── public/
+│   │   ├── manifest.json    # PWA config
+│   │   └── service-worker.js
+│   ├── src/
+│   │   ├── components/      # React components
+│   │   ├── services/        # API calls, storage
+│   │   ├── hooks/           # Custom React hooks
+│   │   ├── utils/           # Helpers, validation
+│   │   └── styles/          # CSS/Tailwind
+│   ├── package.json
+│   └── vite.config.js       # Build tool
+└── database/
+    ├── migrations/          # DB schema changes
+    ├── seeds/               # Initial data
+    └── docker-compose.yml   # Local DB setup

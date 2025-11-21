@@ -1,0 +1,16 @@
+// App Structure
+src/
+├── components/
+│   ├── TripForm.jsx     # Mobile-optimized form
+│   ├── SyncStatus.jsx   # Shows offline/online status
+│   └── Dashboard.jsx    # Admin views
+├── services/
+│   ├── api.js           # Handles API calls
+│   ├── sync.js          # Offline sync logic
+│   └── storage.js       # Local SQLite operations
+├── hooks/
+│   ├── useOffline.js    # Custom hook for offline detection
+│   └── useSync.js       # Sync management
+└── utils/
+    ├── validation.js    # Form validation
+    └── compression.js   # Data compression for sending
