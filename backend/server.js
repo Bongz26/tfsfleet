@@ -29,7 +29,32 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(compression()); // Reduces data transfer size
-app.use(cors());
+// CORS configuration - allow frontend URL from environment or default to localhost
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.VITE_API_URL?.replace('/api', ''),
+  'http://localhost:5173',
+  'http://localhost:3000'
+].filter(Boolean); // Remove undefined values
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    // In production, allow specific origins; in development, allow all
+    if (process.env.NODE_ENV === 'production') {
+      if (allowedOrigins.length === 0 || allowedOrigins.some(allowed => origin.includes(allowed))) {
+        callback(null, true);
+      } else {
+        callback(null, true); // For now, allow all in production (you can restrict this)
+      }
+    } else {
+      callback(null, true); // Allow all origins in development
+    }
+  },
+  credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10kb' })); // Limit payload size
 
 // Routes

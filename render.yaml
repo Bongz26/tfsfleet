@@ -1,0 +1,36 @@
+services:
+  # Backend API Service
+  - type: web
+    name: fleet-management-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false  # Set this in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true  # Render will generate a secure secret
+      - key: TEST_MODE
+        value: "false"
+      - key: SKIP_DB
+        value: "false"
+    healthCheckPath: /api/test-db
+
+  # Frontend Service
+  - type: web
+    name: fleet-management-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: fleet-management-backend
+          property: host
+
